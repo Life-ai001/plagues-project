@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaHeart, FaRegHeart, FaShoppingCart, FaUser, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { FaSearch, FaHeart, FaRegHeart, FaShoppingCart, FaUser, FaSignOutAlt, FaCog, FaUserShield } from 'react-icons/fa';
 import { AuthContext } from '../auth/AuthProvider.jsx';
 import './Css/Homepage.css';
 
@@ -270,6 +270,9 @@ export default function Homepage() {
             <div className="auth-buttons">
               <Link to="/login" className="sign-in-btn">Sign In</Link>
               <Link to="/register" className="sign-up-btn">Sign Up</Link>
+              <Link to="/admin/login" className="sign-in-btn" title="Admin Login">
+                <FaUserShield />
+              </Link>
             </div>
           )}
         </div>

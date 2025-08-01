@@ -6,22 +6,25 @@ import AppRouter from './routers/AppRouter.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Slide, ToastContainer } from 'react-toastify';
 import AuthContextProvider from './auth/AuthProvider.jsx';
+import { CartProvider } from './contexts/CartContext';
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter> {/* ✅ Wrap AppRouter in BrowserRouter */}
+    <BrowserRouter>
       <AuthContextProvider>
         <QueryClientProvider client={queryClient}>
-          <AppRouter />
-          <ToastContainer
-            position="top-center"
-            autoClose={2000}
-            hideProgressBar={false}
-            theme="dark"
-            transition={Slide}
-          />
+          <CartProvider>
+            <AppRouter />
+            <ToastContainer
+              position="top-center"
+              autoClose={2000}
+              hideProgressBar={false}
+              theme="dark"
+              transition={Slide}
+            />
+          </CartProvider>
         </QueryClientProvider>
       </AuthContextProvider>
     </BrowserRouter>

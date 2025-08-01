@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAllProducts } from '../../services/productService';
 import useApi from '../../hooks/useApi';
+import { useCart } from '../../contexts/CartContext';
+import { FaShoppingCart, FaCheck } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import '../../styles/global.css';
 import './ProductList.css';
 
@@ -8,6 +11,8 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
+  const [addedItems, setAddedItems] = useState({});
+  const { addToCart } = useCart();
   const { data, loading, error, callApi } = useApi(getAllProducts);
 
   useEffect(() => {
@@ -99,10 +104,43 @@ const ProductList = () => {
                   </span>
                 </div>
                 <button 
-                  className="btn btn-primary add-to-cart"
-                  disabled={product.stock === 0}
+                  className={`add-to-cart-btn ${addedItems[product._id] ? 'added' : ''}`}
+                  onClick={() => {
+                    addToCart(product);
+                    setAddedItems(prev => ({
+                      ...prev,
+                      [product._id]: true
+                    }));
+                    
+                    toast.success(`${product.name} added to cart!`, {
+                      position: "bottom-right",
+                      autoClose: 2000,
+                      hideProgressBar: true,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                    
+                    // Reset the added state after 2 seconds
+                    setTimeout(() => {
+                      setAddedItems(prev => ({
+                        ...prev,
+                        [product._id]: false
+                      }));
+                    }, 2000);
+                  }}
+                  disabled={product.stock <= 0}
                 >
-                  {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                  {addedItems[product._id] ? (
+                    <>
+                      <FaCheck /> Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <FaShoppingCart /> {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                    </>
+                  )}
                 </button>
               </div>
             </div>

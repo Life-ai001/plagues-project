@@ -1,12 +1,15 @@
 // App.jsx
 import { BrowserRouter } from 'react-router-dom';
-import AppRouter from './routers/AppRouter'; // Adjust if your path is different
+import AppRouter from './routers/AppRouter';
+import { CartProvider } from './contexts/CartContext';
 import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <AppRouter />
+      <CartProvider>
+        <AppRouter />
+      </CartProvider>
     </BrowserRouter>
   );
 }

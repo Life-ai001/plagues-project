@@ -15,10 +15,19 @@ const api = axios.create({
 // Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    // First check for regular user token, then admin token
+    let token = localStorage.getItem('token');
+    if (!token) {
+      token = localStorage.getItem('adminToken');
+    }
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('Using token for authorization');
+    } else {
+      console.warn('No authentication token found');
     }
+    
     console.log(`Making ${config.method?.toUpperCase()} request to:`, config.url);
     return config;
   },

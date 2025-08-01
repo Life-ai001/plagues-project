@@ -29,7 +29,10 @@ export default function Login() {
                 <h2 className="login-title">Login</h2>
 
                 <div className="login-links">
-                    <Link to="/register" className="nav-link">Don't have an account? Sign Up</Link>
+                    <div className="admin-login-prompt">
+                        <span>Are you an admin? </span>
+                        <Link to="/admin/login" className="admin-login-link">Login here</Link>
+                    </div>
                 </div>
 
                 <div className="login-form-wrapper">

@@ -23,10 +23,21 @@ export const getProductById = async (id) => {
 // Create a new product
 export const createProduct = async (productData) => {
   try {
+    console.log('Sending product data to server:', productData);
     const response = await apiClient.post("/products", productData);
+    console.log('Server response:', response);
     return response.data;
   } catch (err) {
-    throw err.response?.data || { message: "Failed to create product" };
+    console.error('Error in createProduct:', {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status,
+      statusText: err.response?.statusText
+    });
+    throw err.response?.data || { 
+      message: "Failed to create product",
+      originalError: err.message 
+    };
   }
 };
 
