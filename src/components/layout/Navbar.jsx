@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 import { useCart } from '../../contexts/CartContext';
-import { FaShoppingCart, FaUser, FaSignOutAlt, FaHome, FaBox, FaList } from 'react-icons/fa';
+import { FaSearch, FaBell, FaChevronDown, FaSignOutAlt } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -15,41 +15,45 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const [showDropdown, setShowDropdown] = useState(false);
+
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <Link to="/" className="navbar-logo">
-          Abs-Online
+    <nav className="nav">
+      <div className="nav-left">
+        <Link to="/" className="nav-logo">
+          <img src="/vite.svg" alt="Logo" />
         </Link>
+        <div className="nav-links">
+          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/browse" className="nav-link">Browse</Link>
+          <Link to="/mylist" className="nav-link">My List</Link>
+        </div>
       </div>
 
-      <div className="navbar-links">
-        <Link to="/" className="nav-link">
-          <FaHome className="nav-icon" /> Home
-        </Link>
-        <Link to="/products" className="nav-link">
-          <FaBox className="nav-icon" /> Products
-        </Link>
-        <Link to="/checkout" className="nav-link">
-          <FaList className="nav-icon" /> My List ({cartCount})
-        </Link>
-      </div>
-
-      <div className="navbar-actions">
+      <div className="nav-right">
         {user ? (
-          <>
-            <Link to="/profile" className="nav-link">
-              <FaUser className="nav-icon" /> {user.name || 'Profile'}
-            </Link>
-            {user.isAdmin && (
-              <Link to="/admin" className="nav-link">
-                Admin Dashboard
-              </Link>
-            )}
-            <button onClick={handleLogout} className="nav-link">
-              <FaSignOutAlt className="nav-icon" /> Logout
-            </button>
-          </>
+          <div className="user-menu">
+            <span className="welcome-text">Welcome, {user.name || 'User'}</span>
+            <div className="profile-section">
+              <div className="dropdown">
+                <img 
+                  className="nav-avatar" 
+                  src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" 
+                  alt="Profile"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                />
+                {showDropdown && (
+                  <div className="dropdown-content">
+                    <Link to="/profile">My Profile</Link>
+                    <Link to="/account">Account Settings</Link>
+                    <button onClick={handleLogout} className="sign-out-btn">
+                      <FaSignOutAlt /> Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         ) : (
           <>
             <Link to="/login" className="nav-link">

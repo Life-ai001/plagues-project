@@ -54,16 +54,19 @@
 }
 
 .code-input {
-    width: 100%;
-    padding: 1rem 1.2rem;
+    width: 70%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: 2px;
     text-align: center;
     transition: all 0.3s ease;
     background-color: #f8f9fa;
+    display: block;
 }
 
 .code-input:focus {

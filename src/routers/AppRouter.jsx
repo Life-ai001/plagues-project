@@ -1,6 +1,7 @@
 import React, { useContext, Suspense, lazy } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthProvider.jsx';
+import { CartProvider } from '../contexts/CartContext';
 import Navbar from '../components/layout/Navbar';
 
 // Lazy load components for better performance
@@ -46,8 +47,9 @@ export default function AppRouter() {
   }
 
   return (
-    <div className="app-container default-layout">
-      <Navbar />
+    <CartProvider>
+      <div className="app-container default-layout">
+        {/* Navbar removed as per user request */}
       <main className="main-content">
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
@@ -109,5 +111,6 @@ export default function AppRouter() {
         </Suspense>
       </main>
     </div>
+    </CartProvider>
   );
-}
+};
