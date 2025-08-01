@@ -5,8 +5,10 @@ import { FaArrowLeft } from 'react-icons/fa';
 import '../pages/Css/Profile.css';
 
 const Profile = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, setUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
@@ -26,10 +28,43 @@ const Profile = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add update profile logic here
-    setIsEditing(false);
+    setError('');
+    setIsUpdating(true);
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/users/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to update profile');
+      }
+
+      const updatedUser = await response.json();
+      
+      // Update the user in context and local storage
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setError(error.message || 'An error occurred while updating your profile');
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleLogout = () => {
@@ -120,14 +155,23 @@ const Profile = () => {
             </div>
           )}
 
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
           <div className="form-actions">
             {isEditing ? (
               <>
                 <button type="button" className="btn btn-secondary" onClick={() => setIsEditing(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  Save Changes
+                <button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? 'Saving...' : 'Save Changes'}
                 </button>
               </>
             ) : (

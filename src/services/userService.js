@@ -3,9 +3,10 @@ import apiClient from "../api/api.js";
 // Get all users (admin only)
 export const getAllUsers = async () => {
   try {
-    const response = await apiClient.get("/auth/all");
+    const response = await apiClient.get("/users");
     return response.data;
   } catch (err) {
+    console.error('Error fetching users:', err);
     throw err.response?.data || { message: "Failed to fetch users" };
   }
 };
@@ -13,9 +14,10 @@ export const getAllUsers = async () => {
 // Get current user's profile
 export const getCurrentUser = async () => {
   try {
-    const response = await apiClient.get("/auth/me");
+    const response = await apiClient.get("/users/me");
     return response.data;
   } catch (err) {
+    console.error('Error fetching current user:', err);
     throw err.response?.data || { message: "Failed to fetch current user" };
   }
 };
@@ -23,9 +25,10 @@ export const getCurrentUser = async () => {
 // Get user by ID
 export const getUserById = async (userId) => {
   try {
-    const response = await apiClient.get(`/auth/user/${userId}`);
+    const response = await apiClient.get(`/users/${userId}`);
     return response.data;
   } catch (err) {
+    console.error(`Error fetching user ${userId}:`, err);
     throw err.response?.data || { message: "Failed to fetch user" };
   }
 };
@@ -33,9 +36,10 @@ export const getUserById = async (userId) => {
 // Update user profile
 export const updateProfile = async (userData) => {
   try {
-    const response = await apiClient.put("/auth/profile", userData);
+    const response = await apiClient.patch("/users/me", userData);
     return response.data;
   } catch (err) {
+    console.error('Error updating profile:', err);
     throw err.response?.data || { message: "Failed to update profile" };
   }
 };
@@ -43,13 +47,14 @@ export const updateProfile = async (userData) => {
 // Update user password
 export const updatePassword = async (currentPassword, newPassword) => {
   try {
-    const response = await apiClient.put("/auth/password", {
+    const response = await apiClient.patch("/users/me/password", {
       currentPassword,
       newPassword,
     });
     return response.data;
   } catch (err) {
-    throw err.response?.data || { message: "Failed to update password" };
+    console.error('Error updating password:', err);
+    throw err.response?.data || { message: err.message || "Failed to update password" };
   }
 };
 

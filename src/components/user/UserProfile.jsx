@@ -143,26 +143,10 @@ const UserProfile = () => {
                   )}
                 </label>
               </div>
-              
               <div className="user-role">
                 <span className={`role-badge ${userData?.data?.isAdmin ? 'admin' : 'user'}`}>
                   {userData?.data?.isAdmin ? 'Admin' : 'User'}
                 </span>
-              </div>
-            </div>
-
-            <div className="profile-stats">
-              <div className="stat-item">
-                <div className="stat-value">12</div>
-                <div className="stat-label">Orders</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">4.8</div>
-                <div className="stat-label">Rating</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-value">3</div>
-                <div className="stat-label">Reviews</div>
               </div>
             </div>
           </div>

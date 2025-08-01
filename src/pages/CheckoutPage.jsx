@@ -2,30 +2,30 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './Css/CheckoutPage.css';
 
-// Payment method logos
+// Payment method logos with working image URLs
 const PAYMENT_METHODS = [
   {
     id: 'esewa',
     name: 'eSewa',
-    logo: 'https://esewa.com.np/common/images/esewa-logo.png',
+    logo: 'https://esewa.com.np/common/images/og_image.jpg', // Using og_image as it's more reliable
     url: 'https://esewa.com.np/#/home'
   },
   {
     id: 'khalti',
     name: 'Khalti',
-    logo: 'https://khalti.com/static/khalti-logo.png',
+    logo: 'https://web.khalti.com/static/img/logo.png', // Direct link to Khalti logo
     url: 'https://web.khalti.com/#/login'
   },
   {
     id: 'imepay',
     name: 'IME Pay',
-    logo: 'https://www.imepay.com.np/static/media/imepay-logo.8e1d9c2f.png',
+    logo: 'https://www.imepay.com.np/images/logo.png', // Updated IME Pay logo URL
     url: 'https://services.imepay.com.np/'
   },
   {
     id: 'fonepay',
     name: 'Fonepay',
-    logo: 'https://fonepay.com.np/assets/images/logo/logo.png',
+    logo: 'https://fonepay.com/assets/images/logo/logo.png', // Updated Fonepay logo URL
     url: 'https://fonepay.com/customers/qr-payment'
   }
 ];
@@ -92,16 +92,24 @@ export default function CheckoutPage() {
                 window.open(method.url, '_blank');
               }}
             >
-              <img 
-                src={method.logo} 
-                alt={method.name} 
-                className="payment-icon" 
-                onError={(e) => {
-                  // Fallback to text if image fails to load
-                  e.target.style.display = 'none';
-                  e.target.parentElement.textContent = method.name;
-                }}
-              />
+              {method.logo ? (
+                <img 
+                  src={method.logo} 
+                  alt={method.name} 
+                  className="payment-icon" 
+                  onError={(e) => {
+                    // Fallback to text if image fails to load
+                    e.target.style.display = 'none';
+                    const parent = e.target.parentElement;
+                    if (parent) {
+                      const text = document.createTextNode(method.name);
+                      parent.appendChild(text);
+                    }
+                  }}
+                />
+              ) : (
+                <span>{method.name}</span>
+              )}
             </a>
           ))}
         </div>
